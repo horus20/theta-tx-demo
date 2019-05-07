@@ -36,8 +36,8 @@ class Coins{
     rlpInput(){
 
         let rlpInput = [
-            (this.thetaWei.isEqualTo(new BigNumber(0))) ? Bytes.fromNat("0x0") : Bytes.fromNumber(this.thetaWei),
-            (this.tfuelWei.isEqualTo(new BigNumber(0))) ? Bytes.fromNat("0x0") : Bytes.fromNumber(this.tfuelWei)
+            (this.thetaWei.isEqualTo(new BigNumber(0))) ? Bytes.fromNat("0x00") : Bytes.fromNumber(this.thetaWei),
+            (this.tfuelWei.isEqualTo(new BigNumber(0))) ? Bytes.fromNat("0x00") : Bytes.fromNumber(this.tfuelWei)
         ];
 
         return rlpInput;
@@ -99,14 +99,14 @@ const TxType = {
 
 class EthereumTx{
     constructor(payload){
-        this.nonce = "0x0";
-        this.gasPrice = "0x0";
-        this.gas = "0x0";
+        this.nonce = "0x00";
+        this.gasPrice = "0x00";
+        this.gas = "0x00";
         this.to = "0x0000000000000000000000000000000000000000";
-        this.value = "0x0";
+        this.value = "0x00";
         this.input = payload;
     }
-    
+
     rlpInput() {
         let rplInput= [
             Bytes.fromNat(this.nonce),

@@ -3056,8 +3056,8 @@
         rlpInput(){
 
             let rlpInput = [
-                (this.thetaWei.isEqualTo(new bignumber(0))) ? bytes.fromNat("0x0") : bytes.fromNumber(this.thetaWei),
-                (this.tfuelWei.isEqualTo(new bignumber(0))) ? bytes.fromNat("0x0") : bytes.fromNumber(this.tfuelWei)
+                (this.thetaWei.isEqualTo(new bignumber(0))) ? bytes.fromNat("0x00") : bytes.fromNumber(this.thetaWei),
+                (this.tfuelWei.isEqualTo(new bignumber(0))) ? bytes.fromNat("0x00") : bytes.fromNumber(this.tfuelWei)
             ];
 
             return rlpInput;
@@ -3119,14 +3119,14 @@
 
     class EthereumTx{
         constructor(payload){
-            this.nonce = "0x0";
-            this.gasPrice = "0x0";
-            this.gas = "0x0";
+            this.nonce = "0x00";
+            this.gasPrice = "0x00";
+            this.gas = "0x00";
             this.to = "0x0000000000000000000000000000000000000000";
-            this.value = "0x0";
+            this.value = "0x00";
             this.input = payload;
         }
-        
+
         rlpInput() {
             let rplInput= [
                 bytes.fromNat(this.nonce),
