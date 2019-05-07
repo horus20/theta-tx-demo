@@ -4,10 +4,11 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var Bytes = _interopDefault(require('eth-lib/lib/bytes'));
 var BigNumber = _interopDefault(require('bignumber.js'));
-var RLP = _interopDefault(require('eth-lib/lib/rlp'));
+var RLP = _interopDefault(require('rlp'));
 var isString = _interopDefault(require('lodash/isString'));
 var isNumber = _interopDefault(require('lodash/isNumber'));
 var Hash = _interopDefault(require('eth-lib/lib/hash'));
+var RLP$1 = _interopDefault(require('eth-lib/lib/rlp'));
 
 class Tx{
     constructor(){
@@ -36,8 +37,8 @@ class Coins{
     rlpInput(){
 
         let rlpInput = [
-            (this.thetaWei.isEqualTo(new BigNumber(0))) ? Bytes.fromNat("0x00") : Bytes.fromNumber(this.thetaWei),
-            (this.tfuelWei.isEqualTo(new BigNumber(0))) ? Bytes.fromNat("0x00") : Bytes.fromNumber(this.tfuelWei)
+            (this.thetaWei.isEqualTo(new BigNumber(0))) ? Bytes.fromNat("0x0") : Bytes.fromNumber(this.thetaWei),
+            (this.tfuelWei.isEqualTo(new BigNumber(0))) ? Bytes.fromNat("0x0") : Bytes.fromNumber(this.tfuelWei)
         ];
 
         return rlpInput;
@@ -99,11 +100,11 @@ const TxType = {
 
 class EthereumTx{
     constructor(payload){
-        this.nonce = "0x00";
-        this.gasPrice = "0x00";
-        this.gas = "0x00";
+        this.nonce = "0x0";
+        this.gasPrice = "0x0";
+        this.gas = "0x0";
         this.to = "0x0000000000000000000000000000000000000000";
-        this.value = "0x00";
+        this.value = "0x0";
         this.input = payload;
     }
 
@@ -148,14 +149,15 @@ class SendTx extends Tx{
         let originalSignature = input.signature;
         input.signature = "";
 
-        let encodedChainID = RLP.encode(Bytes.fromString(chainID));
-        let encodedTxType = RLP.encode(Bytes.fromNumber(this.getType()));
-        let encodedTx = RLP.encode(this.rlpInput());
+        let encodedChainID = RLP.encode(Bytes.fromString(chainID)).toString('hex');
+        let encodedTxType = RLP.encode(Bytes.fromNumber(this.getType())).toString('hex');
+        let encodedTx = RLP.encode(this.rlpInput()).toString('hex');
+
         let payload = encodedChainID + encodedTxType.slice(2) + encodedTx.slice(2);
 
         // For ethereum tx compatibility, encode the tx as the payload
         let ethTxWrapper = new EthereumTx(payload);
-        let signedBytes = RLP.encode(ethTxWrapper.rlpInput()); // the signBytes conforms to the Ethereum raw tx format
+        let signedBytes = RLP.encode(ethTxWrapper.rlpInput()).toString('hex'); // the signBytes conforms to the Ethereum raw tx format
 
         //console.log("SendTx :: signBytes :: txRawBytes = " + signedBytes);
 
@@ -312,8 +314,8 @@ class TxSigner {
     }
 
     static serializeTx(tx) {
-        let encodedTxType = RLP.encode(Bytes.fromNumber(tx.getType()));
-        let encodedTx = RLP.encode(tx.rlpInput()); // this time encode with signature
+        let encodedTxType = RLP$1.encode(Bytes.fromNumber(tx.getType()));
+        let encodedTx = RLP$1.encode(tx.rlpInput()); // this time encode with signature
         let signedRawBytes = encodedTxType + encodedTx.slice(2);
 
         return signedRawBytes;

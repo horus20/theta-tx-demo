@@ -10,8 +10,8 @@ export class Coins{
     rlpInput(){
 
         let rlpInput = [
-            (this.thetaWei.isEqualTo(new BigNumber(0))) ? Bytes.fromNat("0x00") : Bytes.fromNumber(this.thetaWei),
-            (this.tfuelWei.isEqualTo(new BigNumber(0))) ? Bytes.fromNat("0x00") : Bytes.fromNumber(this.tfuelWei)
+            (this.thetaWei.isEqualTo(new BigNumber(0))) ? Bytes.fromNat("0x0") : Bytes.fromNumber(this.thetaWei),
+            (this.tfuelWei.isEqualTo(new BigNumber(0))) ? Bytes.fromNat("0x0") : Bytes.fromNumber(this.tfuelWei)
         ];
 
         return rlpInput;
