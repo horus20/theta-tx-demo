@@ -39,7 +39,7 @@ export class SendTx extends Tx{
         let encodedTxType = RLP.encode(Bytes.fromNumber(this.getType())).toString('hex');
         let encodedTx = RLP.encode(this.rlpInput()).toString('hex');
 
-        let payload = encodedChainID + encodedTxType.slice(2) + encodedTx.slice(2)
+        let payload = '0x' + encodedChainID + encodedTxType + encodedTx
 
         // For ethereum tx compatibility, encode the tx as the payload
         let ethTxWrapper = new EthereumTx(payload);
@@ -50,7 +50,7 @@ export class SendTx extends Tx{
         // Attach the original signature back to the inputs
         input.signature = originalSignature;
 
-        return signedBytes;
+        return '0x' + signedBytes;
     }
 
     getType(){

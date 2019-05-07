@@ -1,4 +1,4 @@
-import RLP from 'eth-lib/lib/rlp';
+import RLP from 'rlp';
 import Bytes from 'eth-lib/lib/bytes';
 import {sha3, sign} from '../crypto'
 
@@ -25,10 +25,10 @@ export class TxSigner {
     }
 
     static serializeTx(tx) {
-        let encodedTxType = RLP.encode(Bytes.fromNumber(tx.getType()));
-        let encodedTx = RLP.encode(tx.rlpInput()); // this time encode with signature
-        let signedRawBytes = encodedTxType + encodedTx.slice(2);
+        let encodedTxType = RLP.encode(Bytes.fromNumber(tx.getType())).toString('hex');
+        let encodedTx = RLP.encode(tx.rlpInput()).toString('hex'); // this time encode with signature
+        let signedRawBytes = encodedTxType + encodedTx;
 
-        return signedRawBytes;
+        return '0x' + signedRawBytes;
     }
 }

@@ -8,7 +8,6 @@ var RLP = _interopDefault(require('rlp'));
 var isString = _interopDefault(require('lodash/isString'));
 var isNumber = _interopDefault(require('lodash/isNumber'));
 var Hash = _interopDefault(require('eth-lib/lib/hash'));
-var RLP$1 = _interopDefault(require('eth-lib/lib/rlp'));
 
 class Tx{
     constructor(){
@@ -153,7 +152,7 @@ class SendTx extends Tx{
         let encodedTxType = RLP.encode(Bytes.fromNumber(this.getType())).toString('hex');
         let encodedTx = RLP.encode(this.rlpInput()).toString('hex');
 
-        let payload = encodedChainID + encodedTxType.slice(2) + encodedTx.slice(2);
+        let payload = '0x' + encodedChainID + encodedTxType + encodedTx;
 
         // For ethereum tx compatibility, encode the tx as the payload
         let ethTxWrapper = new EthereumTx(payload);
@@ -164,7 +163,7 @@ class SendTx extends Tx{
         // Attach the original signature back to the inputs
         input.signature = originalSignature;
 
-        return signedBytes;
+        return '0x' + signedBytes;
     }
 
     getType(){
@@ -314,11 +313,11 @@ class TxSigner {
     }
 
     static serializeTx(tx) {
-        let encodedTxType = RLP$1.encode(Bytes.fromNumber(tx.getType()));
-        let encodedTx = RLP$1.encode(tx.rlpInput()); // this time encode with signature
-        let signedRawBytes = encodedTxType + encodedTx.slice(2);
+        let encodedTxType = RLP.encode(Bytes.fromNumber(tx.getType())).toString('hex');
+        let encodedTx = RLP.encode(tx.rlpInput()).toString('hex'); // this time encode with signature
+        let signedRawBytes = encodedTxType + encodedTx;
 
-        return signedRawBytes;
+        return '0x' + signedRawBytes;
     }
 }
 

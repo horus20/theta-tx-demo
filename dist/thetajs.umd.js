@@ -6849,7 +6849,7 @@
             let encodedTxType = RLP.encode(bytes.fromNumber(this.getType())).toString('hex');
             let encodedTx = RLP.encode(this.rlpInput()).toString('hex');
 
-            let payload = encodedChainID + encodedTxType.slice(2) + encodedTx.slice(2);
+            let payload = '0x' + encodedChainID + encodedTxType + encodedTx;
 
             // For ethereum tx compatibility, encode the tx as the payload
             let ethTxWrapper = new EthereumTx(payload);
@@ -6860,7 +6860,7 @@
             // Attach the original signature back to the inputs
             input.signature = originalSignature;
 
-            return signedBytes;
+            return '0x' + signedBytes;
         }
 
         getType(){
@@ -6890,73 +6890,6 @@
             return rlpInput;
         }
     }
-
-    // The RLP format
-    // Serialization and deserialization for the BytesTree type, under the following grammar:
-    // | First byte | Meaning                                                                    |
-    // | ---------- | -------------------------------------------------------------------------- |
-    // | 0   to 127 | HEX(leaf)                                                                  |
-    // | 128 to 183 | HEX(length_of_leaf + 128) + HEX(leaf)                                      |
-    // | 184 to 191 | HEX(length_of_length_of_leaf + 128 + 55) + HEX(length_of_leaf) + HEX(leaf) |
-    // | 192 to 247 | HEX(length_of_node + 192) + HEX(node)                                      |
-    // | 248 to 255 | HEX(length_of_length_of_node + 128 + 55) + HEX(length_of_node) + HEX(node) |
-
-    const encode = tree => {
-      const padEven = str => str.length % 2 === 0 ? str : "0" + str;
-
-      const uint = num => padEven(num.toString(16));
-
-      const length = (len, add) => len < 56 ? uint(add + len) : uint(add + uint(len).length / 2 + 55) + uint(len);
-
-      const dataTree = tree => {
-        if (typeof tree === "string") {
-          const hex = tree.slice(2);
-          const pre = hex.length != 2 || hex >= "80" ? length(hex.length / 2, 128) : "";
-          return pre + hex;
-        } else {
-          const hex = tree.map(dataTree).join("");
-          const pre = length(hex.length / 2, 192);
-          return pre + hex;
-        }
-      };
-
-      return "0x" + dataTree(tree);
-    };
-
-    const decode = hex => {
-      let i = 2;
-
-      const parseTree = () => {
-        if (i >= hex.length) throw "";
-        const head = hex.slice(i, i + 2);
-        return head < "80" ? (i += 2, "0x" + head) : head < "c0" ? parseHex() : parseList();
-      };
-
-      const parseLength = () => {
-        const len = parseInt(hex.slice(i, i += 2), 16) % 64;
-        return len < 56 ? len : parseInt(hex.slice(i, i += (len - 55) * 2), 16);
-      };
-
-      const parseHex = () => {
-        const len = parseLength();
-        return "0x" + hex.slice(i, i += len * 2);
-      };
-
-      const parseList = () => {
-        const lim = parseLength() * 2 + i;
-        let list = [];
-        while (i < lim) list.push(parseTree());
-        return list;
-      };
-
-      try {
-        return parseTree();
-      } catch (e) {
-        return [];
-      }
-    };
-
-    var rlp = { encode, decode };
 
     // This was ported from https://github.com/emn178/js-sha3, with some minor
     // modifications and pruning. It is licensed under MIT:
@@ -7639,11 +7572,11 @@
         }
 
         static serializeTx(tx) {
-            let encodedTxType = rlp.encode(bytes.fromNumber(tx.getType()));
-            let encodedTx = rlp.encode(tx.rlpInput()); // this time encode with signature
-            let signedRawBytes = encodedTxType + encodedTx.slice(2);
+            let encodedTxType = RLP.encode(bytes.fromNumber(tx.getType())).toString('hex');
+            let encodedTx = RLP.encode(tx.rlpInput()).toString('hex'); // this time encode with signature
+            let signedRawBytes = encodedTxType + encodedTx;
 
-            return signedRawBytes;
+            return '0x' + signedRawBytes;
         }
     }
 
