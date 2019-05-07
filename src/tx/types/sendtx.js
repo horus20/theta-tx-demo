@@ -9,13 +9,8 @@ import RLP from 'eth-lib/lib/rlp';
 import Bytes from 'eth-lib/lib/bytes';
 
 export class SendTx extends Tx{
-    constructor(senderAddr, receiverAddr, theta, tfuel, feeInTFuel, senderSequence){
+    constructor(senderAddr, receiverAddr, thetaWei, tfuelWei, feeInTFuelWei, senderSequence){
         super();
-
-        const ten18 = (new BigNumber(10)).pow(18) // 10^18, 1 Theta = 10^18 ThetaWei, 1 Gamma = 10^ TFuelWei
-        const thetaWei = (new BigNumber(theta)).multipliedBy(ten18)
-        const tfuelWei = (new BigNumber(tfuel)).multipliedBy(ten18)
-        const feeInTFuelWei  = (new BigNumber(feeInTFuel)).pow(12) // Any fee >= 10^12 TFuelWei should work, higher fee yields higher priority
 
         this.fee = new Coins(new BigNumber(0), feeInTFuelWei);
 
