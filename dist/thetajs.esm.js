@@ -1,11 +1,9 @@
-function _interopDefault$1 (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var Bytes = _interopDefault$1(require('eth-lib/lib/bytes'));
-var BigNumber = _interopDefault$1(require('bignumber.js'));
-var RLP = _interopDefault$1(require('eth-lib/lib/rlp'));
-var isString = _interopDefault$1(require('lodash/isString'));
-var isNumber = _interopDefault$1(require('lodash/isNumber'));
-var Hash = _interopDefault$1(require('eth-lib/lib/hash'));
+import Bytes from 'eth-lib/lib/bytes';
+import BigNumber from 'bignumber.js';
+import RLP from 'eth-lib/lib/rlp';
+import isString from 'lodash/isString';
+import isNumber from 'lodash/isNumber';
+import Hash from 'eth-lib/lib/hash';
 
 class Tx{
     constructor(){
@@ -120,17 +118,12 @@ class EthereumTx{
 }
 
 class SendTx extends Tx{
-    constructor(senderAddr, receiverAddr, theta, tfuel, feeInTFuel, senderSequence){
+    constructor(senderAddr, receiverAddr, thetaWei, tfuelWei, feeInTFuelWei, senderSequence){
         super();
 
-        const ten18 = (new BigNumber(10)).pow(18); // 10^18, 1 Theta = 10^18 ThetaWei, 1 Gamma = 10^ TFuelWei
-        const thetaWei = (new BigNumber(theta)).multipliedBy(ten18);
-        const tfuelWei = (new BigNumber(tfuel)).multipliedBy(ten18);
-        const feeInTFuelWei  = (new BigNumber(feeInTFuel)).pow(12); // Any fee >= 10^12 TFuelWei should work, higher fee yields higher priority
+        this.fee = new Coins(new BigNumber(0), new BigNumber(feeInTFuelWei));
 
-        this.fee = new Coins(new BigNumber(0), feeInTFuelWei);
-
-        let txInput = new TxInput(senderAddr, thetaWei, tfuelWei.plus(feeInTFuelWei), senderSequence);
+        let txInput = new TxInput(senderAddr, new BigNumber(thetaWei), new BigNumber(tfuelWei).plus(new BigNumber(feeInTFuelWei)), senderSequence);
         this.inputs = [txInput];
 
         let txOutput = new TxOutput(receiverAddr, thetaWei, tfuelWei);
@@ -324,12 +317,12 @@ class TxSigner {
 }
 
 var index = {
-    SendTx,
-    TxSigner,
-    Utils: {
-        hexToBytes,
-        bytesToHex
-    }
+  SendTx,
+  TxSigner,
+  Utils: {
+    hexToBytes,
+    bytesToHex
+  }
 };
 
-module.exports = index;
+export default index;
