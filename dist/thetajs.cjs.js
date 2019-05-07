@@ -130,7 +130,7 @@ class SendTx extends Tx{
         let txInput = new TxInput(senderAddr, new BigNumber(thetaWei), new BigNumber(tfuelWei).plus(new BigNumber(feeInTFuelWei)), senderSequence);
         this.inputs = [txInput];
 
-        let txOutput = new TxOutput(receiverAddr, thetaWei, tfuelWei);
+        let txOutput = new TxOutput(receiverAddr, new BigNumber(thetaWei), new BigNumber(tfuelWei));
         this.outputs = [txOutput];
     }
 

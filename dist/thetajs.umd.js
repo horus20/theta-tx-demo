@@ -3217,7 +3217,7 @@
             let txInput = new TxInput(senderAddr, new bignumber(thetaWei), new bignumber(tfuelWei).plus(new bignumber(feeInTFuelWei)), senderSequence);
             this.inputs = [txInput];
 
-            let txOutput = new TxOutput(receiverAddr, thetaWei, tfuelWei);
+            let txOutput = new TxOutput(receiverAddr, new bignumber(thetaWei), new bignumber(tfuelWei));
             this.outputs = [txOutput];
         }
 
