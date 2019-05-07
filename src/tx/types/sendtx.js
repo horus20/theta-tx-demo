@@ -12,9 +12,9 @@ export class SendTx extends Tx{
     constructor(senderAddr, receiverAddr, thetaWei, tfuelWei, feeInTFuelWei, senderSequence){
         super();
 
-        this.fee = new Coins(new BigNumber(0), feeInTFuelWei);
+        this.fee = new Coins(new BigNumber(0), new BigNumber(feeInTFuelWei));
 
-        let txInput = new TxInput(senderAddr, thetaWei, tfuelWei.plus(feeInTFuelWei), senderSequence);
+        let txInput = new TxInput(senderAddr, new BigNumber(thetaWei), new BigNumber(tfuelWei).plus(new BigNumber(feeInTFuelWei)), senderSequence);
         this.inputs = [txInput];
 
         let txOutput = new TxOutput(receiverAddr, thetaWei, tfuelWei);
