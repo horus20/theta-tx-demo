@@ -1,9 +1,11 @@
-import Bytes from 'eth-lib/lib/bytes';
-import BigNumber from 'bignumber.js';
-import RLP from 'eth-lib/lib/rlp';
-import isString from 'lodash/isString';
-import isNumber from 'lodash/isNumber';
-import Hash from 'eth-lib/lib/hash';
+function _interopDefault$1 (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var Bytes = _interopDefault$1(require('eth-lib/lib/bytes'));
+var BigNumber = _interopDefault$1(require('bignumber.js'));
+var RLP = _interopDefault$1(require('eth-lib/lib/rlp'));
+var isString = _interopDefault$1(require('lodash/isString'));
+var isNumber = _interopDefault$1(require('lodash/isNumber'));
+var Hash = _interopDefault$1(require('eth-lib/lib/hash'));
 
 class Tx{
     constructor(){
@@ -330,4 +332,4 @@ var index = {
     }
 };
 
-export default index;
+module.exports = index;
